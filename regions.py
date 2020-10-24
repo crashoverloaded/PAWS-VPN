@@ -43,3 +43,22 @@ region_code={
 16:"ca-central-1"
 
 }
+
+AMI ={
+1:"ami-032930428bf1abbff",
+2:"ami-027cab9a7bf0155df",
+3:"ami-01fee56b22f308154",
+4:"ami-088c153f74339f34c",
+5:"ami-015232c01a82b847b",
+6:"ami-0474863011a7d1541",
+7:"ami-0765d48d7e15beb93",
+8:"ami-0caf07637eda19d9c",
+9:"ami-0de4b8910494dba0f",
+10:"ami-0ba35dc9caf73d1c7",
+11:"ami-0b2c2a754d5b4da22",
+12:"ami-0ae99b503e8694028",
+13:"ami-03b42693dc6a7dc35",
+14:"ami-03cfb5e1fb4fac428",
+15:"ami-0a52e8a6018e92bb0",
+16:"ami-0803e21a2ec22f953"
+}
