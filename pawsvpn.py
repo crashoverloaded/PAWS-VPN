@@ -20,6 +20,7 @@ if os.path.isfile(path):
 
 # if not..
 else:
+    # Writing to the ~/.aws/credentials file
 
     os.system("mkdir "+path[:-12])
     f = open(path, "w+")
@@ -35,8 +36,15 @@ print("Select a region for VPN from list below.\n")
 
 for i in regions.region:
     print(str(i)+" ||||-------------->>>>> "+str(regions.region[i])+"\n")
-reg = regions.region[int(input("Enter Region Number: "))]
-print(reg)
+
+reg_num = int(input("Enter Region Number: "))
+reg = regions.region[reg_num]
+print("***************************************")
+print("You Selected "+reg+"\n")
+
+# Writing selected region to ~/.aws/config file
+
+print(repr("sed '2s/^/region="+str(regions.region_code[reg_num])+"\n/' ~/.aws/config"))
 
 '''
 ec2 = boto3.client('ec2')
@@ -45,5 +53,4 @@ print('Regions:', response['Regions'])
 print("""""""""""""""""""""""""""""""""""""""""""""""")
 response = ec2.describe_availability_zones()
 print('Availability Zones:', response['AvailabilityZones'])
-
 '''
