@@ -1,4 +1,5 @@
 import boto3
+import time
 import os
 import getpass
 import regions
@@ -67,3 +68,24 @@ ec2 = boto3.resource('ec2',region_name=regions.region_code[select_region.reg_num
 
 ec2.create_instances(ImageId=regions.AMI[select_region.reg_num], MinCount=1, MaxCount=1,InstanceType='t2.micro')
 print("Your Ec2 instance has been created")
+
+
+# Using Instance
+
+# Fetching the created instance ID
+Instance_ID = []
+for instance in ec2.instances.all():
+    if instance.state['Name'] == "pending":
+        Instance_ID.append(instance.id)
+
+
+# Now using that instance id to fetch Instance Public IP address
+instance = ec2.Instance(id=Instance_ID[0])
+instance.wait_until_running()
+current_instance = list(ec2.instances.filter(InstanceIds=Instance_ID))
+
+ip_address = current_instance[0].public_ip_address
+print(ip_address)
+
+
+
