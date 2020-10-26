@@ -4,7 +4,7 @@ import os
 import getpass
 import regions
 
-# Checking is the AWS Credential files are present
+## Checking is the AWS Credential files are present
 
 user = getpass.getuser()
 cred_path = '/home/'+str(user)+'/.aws/credentials'
@@ -33,7 +33,7 @@ else:
     print("Succesfully saved your credentials at "+cred_path+" !!")
     f.close()
 
-# Selecting regions for VPN
+## Selecting regions for VPN
 
 
 conf_path = '/home/'+str(user)+'/.aws/config' 
@@ -48,7 +48,7 @@ def select_region():
     print("***********************************************")
     print("You Selected "+reg+"\n")
 
-# Writing selected region to ~/.aws/config file
+## Writing selected region to ~/.aws/config file
     
     os.system("sed -i '2s/^/region="+regions.region_code[select_region.reg_num]+"\\n/' "+conf_path)
     os.system("sed -i '3d' "+conf_path)
@@ -63,7 +63,7 @@ else:
     f.close()
     select_region()
 
-# Creating instance 
+## Creating instance 
 ec2 = boto3.resource('ec2',region_name=regions.region_code[select_region.reg_num])
 
 ec2.create_instances(ImageId=regions.AMI[select_region.reg_num], MinCount=1, MaxCount=1,InstanceType='t2.micro')
@@ -78,14 +78,26 @@ for instance in ec2.instances.all():
     if instance.state['Name'] == "pending":
         Instance_ID.append(instance.id)
 
-
 # Now using that instance id to fetch Instance Public IP address
 instance = ec2.Instance(id=Instance_ID[0])
 instance.wait_until_running()
 current_instance = list(ec2.instances.filter(InstanceIds=Instance_ID))
 
+# IP
 ip_address = current_instance[0].public_ip_address
-print(ip_address)
 
 
+# creating AWS Key-Pair to a file
+keypair_name = "AWSVPN_KEY"
+new_pair  = ec2.create_key_pair(KeyName = keypair_name)
 
+with open('./AWSVPN_KEY.pem', 'w') as file:
+    file.write(new_pair.key_material)
+
+# changing AWS File permission
+os.system("chmod 400 AWSVPN_KEY.pem")
+
+#response = ec2.describe_key_pairs()
+#print(response)
+## After Getting IP , making an SSH connection to instance
+#os.system("ssh  )
